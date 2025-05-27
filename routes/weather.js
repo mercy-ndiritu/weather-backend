@@ -11,4 +11,9 @@ router.get('/forecast/:city', weatherController.getForecast);
 // Search cities (autocomplete)
 router.get('/search/:query', weatherController.searchCities);
 
+// Add these routes to handle coordinates
+router.get('/current/coordinates', weatherController.getCurrentWeatherByCoords);
+
+router.get('/forecast/coordinates', weatherController.getForecastByCoords);
+
 module.exports = router;

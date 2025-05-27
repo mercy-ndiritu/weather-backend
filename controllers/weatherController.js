@@ -54,4 +54,16 @@ const weatherController = {
   }
 };
 
+// In weatherController.js
+exports.getCurrentWeatherByCoords = async (req, res) => {
+  const { lat, lon, units } = req.query;
+  // Call OpenWeatherMap API with coordinates
+  // Similar to your existing getCurrentWeather but with lat/lon
+};
+
+exports.getForecastByCoords = async (req, res) => {
+  const { lat, lon, units } = req.query;
+  // Call OpenWeatherMap forecast API with coordinates
+};
+
 module.exports = weatherController;
