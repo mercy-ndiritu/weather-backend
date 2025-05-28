@@ -14,6 +14,11 @@ app.use(express.json());
 // Routes
 app.use('/api/weather', weatherRoutes);
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({ message: 'Weather API is running!', timestamp: new Date().toISOString() });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running!', timestamp: new Date().toISOString() });
