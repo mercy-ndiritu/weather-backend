@@ -1,17 +1,18 @@
 const weatherService = require('../services/weatherService');
-const { validateCity } = require('../utils/helpers');
+const { validateCity, validateCoordinates } = require('../utils/helpers');
 
 const weatherController = {
-  // Get current weather
+  // Get current weather by city
   getCurrentWeather: async (req, res) => {
     try {
       const { city } = req.params;
+      const { units = 'metric' } = req.query;
       
       if (!validateCity(city)) {
         return res.status(400).json({ error: 'Invalid city name' });
       }
 
-      const weatherData = await weatherService.getCurrentWeather(city);
+      const weatherData = await weatherService.getCurrentWeather(city, units);
       res.json(weatherData);
     } catch (error) {
       console.error('Error fetching current weather:', error.message);
@@ -19,19 +20,54 @@ const weatherController = {
     }
   },
 
-  // Get 5-day forecast
+  // Get current weather by coordinates
+  getCurrentWeatherByCoords: async (req, res) => {
+    try {
+      const { lat, lon, units = 'metric' } = req.query;
+      
+      if (!validateCoordinates(lat, lon)) {
+        return res.status(400).json({ error: 'Invalid coordinates' });
+      }
+
+      const weatherData = await weatherService.getCurrentWeatherByCoords(lat, lon, units);
+      res.json(weatherData);
+    } catch (error) {
+      console.error('Error fetching weather by coordinates:', error.message);
+      res.status(500).json({ error: 'Failed to fetch weather data' });
+    }
+  },
+
+  // Get 5-day forecast by city
   getForecast: async (req, res) => {
     try {
       const { city } = req.params;
+      const { units = 'metric' } = req.query;
       
       if (!validateCity(city)) {
         return res.status(400).json({ error: 'Invalid city name' });
       }
 
-      const forecastData = await weatherService.getForecast(city);
+      const forecastData = await weatherService.getForecast(city, units);
       res.json(forecastData);
     } catch (error) {
       console.error('Error fetching forecast:', error.message);
+      res.status(500).json({ error: 'Failed to fetch forecast data' });
+    }
+  },
+
+  // Get 5-day forecast by coordinates
+  getForecastByCoords: async (req, res) => {
+    try {
+      const { lat, lon, units = 'metric' } = req.query;
+      
+      if (!validateCoordinates(lat, lon)) {
+        return res.status(400).json({ error: 'Invalid coordinates' });
+      }
+
+      const forecastData = await weatherService.getForecastByCoords(lat, lon, units);
+      res.json(forecastData);
+    } catch (error) {
+      console.error('Error fetching forecast by coordinates:', error.message);
       res.status(500).json({ error: 'Failed to fetch forecast data' });
     }
   },
@@ -52,18 +88,6 @@ const weatherController = {
       res.status(500).json({ error: 'Failed to search cities' });
     }
   }
-};
-
-// In weatherController.js
-getCurrentWeatherByCoords = async (req, res) => {
-  const { lat, lon, units } = req.query;
-  // Call OpenWeatherMap API with coordinates
-  // Similar to your existing getCurrentWeather but with lat/lon
-};
-
-getForecastByCoords = async (req, res) => {
-  const { lat, lon, units } = req.query;
-  // Call OpenWeatherMap forecast API with coordinates
 };
 
 module.exports = weatherController;
