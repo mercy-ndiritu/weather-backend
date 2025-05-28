@@ -18,4 +18,11 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/weather', require('./routes/weather'));
+
+
+app.get('/', (req, res) => {
+  res.json({ message: 'Weather API is running!' });
+});
+
 module.exports = app;
